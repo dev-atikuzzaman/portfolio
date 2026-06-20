@@ -1,4 +1,1 @@
-Supabase
-
-Project url: https://okxjfrjaqezcsvblzmdw.supabase.co
-anon public: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reGpmcmphcWV6Y3N2Ymx6bWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4ODg2NzgsImV4cCI6MjA5NzQ2NDY3OH0.cVzwTA11xE3FEqGV9Nz5AI8IOiHHOosJzjqsCuoYF2M
+Thank You
