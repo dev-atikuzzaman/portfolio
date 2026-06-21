@@ -38,7 +38,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone())).catch(() => {});
           return res;
         })
         .catch(() => caches.match(req).then((res) => res || caches.match('./')))
@@ -51,7 +51,7 @@ self.addEventListener('fetch', (event) => {
     fetch(req)
       .then((res) => {
         if (res && res.status === 200) {
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone())).catch(() => {});
         }
         return res;
       })
