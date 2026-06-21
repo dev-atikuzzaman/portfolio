@@ -19,7 +19,7 @@
         colors: {
           base: '#0D1117',
           surface: '#161B22',
-          surface2: '#010409',
+          surface2: '#1B2240',
           brass: '#2DA44E',
           brassdim: '#2C974B',
           ink: '#C9D1D9',
@@ -108,39 +108,39 @@
           </svg>
         </div>
       </div>
-      <h1 class="font-display text-3xl tracking-tight">ভল্ট</h1>
-      <p class="text-muted text-sm mt-1">তোমার ব্যক্তিগত সংরক্ষণাগার</p>
+      <h1 class="font-display text-4xl tracking-tight">ভল্ট</h1>
+      <p class="text-muted text-base mt-1">তোমার ব্যক্তিগত সংরক্ষণাগার</p>
     </div>
 
-    <div class="bg-surface border border-edge rounded-2xl p-6">
+    <div class="bg-surface border border-edge rounded-2xl p-7 shadow-[0_0_70px_-15px_rgba(137,87,229,0.45)]">
 
       <!-- Step 1: email -->
       <div id="login-step-email">
-        <label class="text-xs uppercase tracking-wider text-muted font-mono">ইমেইল অ্যাড্রেস</label>
+        <label class="text-sm uppercase tracking-wider text-muted font-mono">ইমেইল অ্যাড্রেস</label>
         <input id="email-input" type="email" placeholder="you@gmail.com"
-          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-4 py-3 text-ink placeholder-muted/60 text-sm">
-        <button onclick="sendOtp()" class="w-full mt-4 bg-brass hover:bg-brassdim text-base font-semibold rounded-lg py-3 text-sm transition-colors">
+          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base placeholder-muted/60">
+        <button onclick="sendOtp()" class="w-full mt-4 bg-brass hover:bg-brassdim text-base font-semibold rounded-lg py-4 text-base transition-colors">
           কোড পাঠাও
         </button>
-        <p class="text-muted text-xs mt-4 text-center leading-relaxed">তোমার ইমেইলে একটি ৬-ডিজিট কোড পাঠানো হবে।<br>সেই কোড দিয়ে লগইন ভেরিফাই হবে।</p>
+        <p class="text-muted text-sm mt-4 text-center leading-relaxed">তোমার ইমেইলে একটি ৬-ডিজিট কোড পাঠানো হবে।<br>সেই কোড দিয়ে লগইন ভেরিফাই হবে।</p>
       </div>
 
       <!-- Step 2: otp -->
       <div id="login-step-otp" class="hidden">
-        <p class="text-sm text-muted mb-1">কোড পাঠানো হয়েছে —</p>
-        <p id="sent-to-email" class="text-sm text-brass font-mono mb-4"></p>
-        <label class="text-xs uppercase tracking-wider text-muted font-mono">৬-ডিজিট কোড</label>
+        <p class="text-base text-muted mb-1">কোড পাঠানো হয়েছে —</p>
+        <p id="sent-to-email" class="text-base text-brass font-mono mb-4"></p>
+        <label class="text-sm uppercase tracking-wider text-muted font-mono">৬-ডিজিট কোড</label>
         <input id="otp-input" type="text" maxlength="6" placeholder="• • • • • •"
-          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-4 py-3 text-ink placeholder-muted/60 text-center text-xl font-mono tracking-[0.5em]">
-        <p id="otp-error" class="text-rust text-xs mt-2 hidden">কোডটি সঠিক নয় বা মেয়াদ শেষ হয়ে গেছে।</p>
-        <button onclick="verifyOtp()" class="w-full mt-4 bg-brass hover:bg-brassdim text-base font-semibold rounded-lg py-3 text-sm transition-colors">
+          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink placeholder-muted/60 text-center text-2xl font-mono tracking-[0.5em]">
+        <p id="otp-error" class="text-rust text-sm mt-2 hidden">কোডটি সঠিক নয় বা মেয়াদ শেষ হয়ে গেছে।</p>
+        <button onclick="verifyOtp()" class="w-full mt-4 bg-brass hover:bg-brassdim text-base font-semibold rounded-lg py-4 text-base transition-colors">
           আনলক করো
         </button>
-        <button onclick="backToEmail()" class="w-full mt-2 text-muted text-xs py-2">← ইমেইল পরিবর্তন করো</button>
+        <button onclick="backToEmail()" class="w-full mt-2 text-muted text-sm py-2">← ইমেইল পরিবর্তন করো</button>
       </div>
 
     </div>
-    <p class="text-center text-muted/60 text-xs mt-6 font-mono">PHASE 2 · Supabase Auth দ্বারা সুরক্ষিত</p>
+    <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </div>
 </div>
 
@@ -168,6 +168,7 @@
       <span class="font-mono text-xs text-muted" id="files-count"></span>
     </div>
     <div id="files-grid" class="grid grid-cols-2 gap-3"></div>
+    <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </section>
 
   <!-- NOTES TAB -->
@@ -177,6 +178,7 @@
       <span class="font-mono text-xs text-muted" id="notes-count"></span>
     </div>
     <div id="notes-list" class="flex flex-col gap-3"></div>
+    <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </section>
 
   <!-- SETTINGS TAB -->
@@ -214,6 +216,7 @@
         <span>লগআউট</span>
       </button>
     </div>
+    <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </section>
 
 </div>
@@ -271,9 +274,9 @@
   <div class="bg-surface border border-edge rounded-2xl p-6 w-full max-w-sm">
     <h3 class="font-display text-lg mb-4">নতুন নোট</h3>
     <input id="new-note-title" type="text" placeholder="শিরোনাম"
-      class="w-full bg-surface2 border border-edge rounded-lg px-4 py-3 text-sm mb-3">
+      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
     <textarea id="new-note-body" placeholder="তোমার নোট লিখো..." rows="5"
-      class="w-full bg-surface2 border border-edge rounded-lg px-4 py-3 text-sm mb-4 resize-none"></textarea>
+      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-4 resize-none"></textarea>
     <div class="flex gap-2 mb-4" id="color-picker">
       <button data-color="brass" class="color-dot w-6 h-6 rounded-full bg-brass ring-2 ring-offset-2 ring-offset-surface ring-brass"></button>
       <button data-color="sage" class="color-dot w-6 h-6 rounded-full bg-sage"></button>
@@ -294,7 +297,7 @@
     <p class="text-sm text-muted mb-4" id="delete-target-name"></p>
     <label class="text-xs uppercase tracking-wider text-muted font-mono">PIN দাও</label>
     <input id="delete-pin-input" type="password" maxlength="4" placeholder="• • • •"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-4 py-3 text-center text-lg font-mono tracking-[0.5em] mb-4">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-center text-xl font-mono tracking-[0.5em] mb-4">
     <p class="text-[10px] text-muted font-mono mb-4 text-center">সেটিংসে সেট করা ৪-ডিজিট PIN দাও</p>
     <div class="flex gap-2">
       <button onclick="closeModal('delete-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
@@ -309,7 +312,7 @@
     <h3 class="font-display text-lg mb-4">ডিলিট প্রোটেকশন PIN</h3>
     <p class="text-sm text-muted mb-4">৪-ডিজিট PIN সেট করো — ফাইল/নোট ডিলিট করার আগে এটা চাওয়া হবে।</p>
     <input id="set-pin-input" type="password" maxlength="4" placeholder="নতুন PIN"
-      class="w-full bg-surface2 border border-edge rounded-lg px-4 py-3 text-center text-lg font-mono tracking-[0.5em] mb-4">
+      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-center text-xl font-mono tracking-[0.5em] mb-4">
     <div class="flex gap-2">
       <button onclick="closeModal('pin-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
       <button onclick="setPin()" class="flex-1 bg-brass text-base rounded-lg py-3 text-sm font-semibold">সেভ করো</button>
@@ -330,8 +333,8 @@
 <script>
   // ================= SUPABASE CONFIG =================
   // এখানে তোমার Supabase প্রজেক্টের URL আর anon key পেস্ট করো (Project Settings → API)
-  const SUPABASE_URL = 'https://okxjfrjaqezcsvblzmdw.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reGpmcmphcWV6Y3N2Ymx6bWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4ODg2NzgsImV4cCI6MjA5NzQ2NDY3OH0.cVzwTA11xE3FEqGV9Nz5AI8IOiHHOosJzjqsCuoYF2M';
+  const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
   const BUCKET = 'portfolio-files';
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -342,6 +345,26 @@
   let pendingDelete = null;
   let pinHash = null;
   let realtimeChannel = null;
+
+  // ================= Quotes (shown on every screen footer) =================
+  const quotes = [
+    { text: 'নিশ্চয়ই আল্লাহ কাউকে তার সামর্থ্যের অতিরিক্ত বোঝা দেন না।', source: 'কুরআন, সুরা বাকারা ২:২৮৬ (ভাবার্থ)' },
+    { text: 'ধৈর্যশীলদের সাথে আল্লাহ আছেন।', source: 'কুরআন, সুরা বাকারা ২:১৫৩ (ভাবার্থ)' },
+    { text: 'যে আল্লাহর উপর ভরসা রাখে, তিনিই তার জন্য যথেষ্ট।', source: 'কুরআন, সুরা আত-তালাক ৬৫:৩ (ভাবার্থ)' },
+    { text: 'সত্য কথা প্রশান্তি আনে, মিথ্যা উদ্বেগ বাড়ায়।', source: 'হাদিস, তিরমিযি (ভাবার্থ)' },
+    { text: 'কাজের মূল্য নিয়তের উপর নির্ভর করে।', source: 'হাদিস, বুখারি-মুসলিম (ভাবার্থ)' },
+    { text: 'তুমি যা খুঁজছ, তা-ই তোমাকে খুঁজছে।', source: 'জালালুদ্দিন রুমি' },
+    { text: 'মন যে রঙে রঙিন হয়, জীবনও সেই রঙ ধারণ করে।', source: 'মার্কাস অরেলিয়াস, মেডিটেশনস (ভাবার্থ)' },
+    { text: 'নিজেকে জানাই সকল জ্ঞানের শুরু।', source: 'এরিস্টটল (ভাবার্থ)' },
+  ];
+  const todaysQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  function renderQuoteFooters() {
+    document.querySelectorAll('.quote-footer').forEach((el) => {
+      el.innerHTML = `“${todaysQuote.text}”<br><span class="font-mono not-italic text-xs text-muted/60">— ${todaysQuote.source}</span>`;
+    });
+  }
+  renderQuoteFooters();
 
   const typeIcon = {
     image: '<svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 4.5h18M3 4.5v15a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19.5v-15M3 4.5V3m18 1.5V3M8.25 9.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>',
