@@ -60,6 +60,15 @@
   .modal-backdrop { backdrop-filter: blur(4px); }
   input:focus, button:focus, textarea:focus { outline: 2px solid #2DA44E; outline-offset: 1px; }
 
+  body.app-bg {
+    background:
+      radial-gradient(circle at 50% 80%, rgba(137, 87, 229, 0.40), transparent 55%),
+      radial-gradient(circle at 75% 95%, rgba(45, 164, 78, 0.12), transparent 50%),
+      linear-gradient(180deg, #0A0C1F 0%, #141132 45%, #1A1438 70%, #0D1117 100%);
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
   #print-report { display: none; }
   @media print {
     body * { visibility: hidden; }
@@ -80,7 +89,7 @@
   }
 </style>
 </head>
-<body class="bg-base text-ink min-h-screen">
+<body class="app-bg text-ink min-h-screen">
 
 <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 bg-rust text-ink text-xs font-mono text-center py-2 z-50 pt-[calc(0.5rem+env(safe-area-inset-top))]">
   📡 অফলাইন — সর্বশেষ সিঙ্ক করা ডেটা দেখানো হচ্ছে
