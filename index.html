@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#15140F">
+<meta name="theme-color" content="#0D1117">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -17,16 +17,16 @@
     theme: {
       extend: {
         colors: {
-          base: '#15140F',
-          surface: '#1F1D17',
-          surface2: '#262318',
-          brass: '#C9974D',
-          brassdim: '#8C6F3E',
-          ink: '#EDEAE1',
-          muted: '#9C988A',
-          sage: '#6B9080',
-          rust: '#B85C4A',
-          edge: '#2D2A22',
+          base: '#0D1117',
+          surface: '#161B22',
+          surface2: '#010409',
+          brass: '#2DA44E',
+          brassdim: '#2C974B',
+          ink: '#C9D1D9',
+          muted: '#8B949E',
+          sage: '#58A6FF',
+          rust: '#F85149',
+          edge: '#30363D',
         },
         fontFamily: {
           display: ['Fraunces', 'serif'],
@@ -51,14 +51,14 @@
   .tab-view { display: none; }
   .tab-view.active { display: block; }
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-thumb { background: #2D2A22; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: #30363D; border-radius: 4px; }
   .dial {
-    background: conic-gradient(from 0deg, #2D2A22, #C9974D, #2D2A22);
+    background: conic-gradient(from 0deg, #30363D, #2DA44E, #30363D);
   }
   @keyframes spin-slow { to { transform: rotate(360deg); } }
   .animate-spin-slow { animation: spin-slow 8s linear infinite; }
   .modal-backdrop { backdrop-filter: blur(4px); }
-  input:focus, button:focus, textarea:focus { outline: 2px solid #C9974D; outline-offset: 1px; }
+  input:focus, button:focus, textarea:focus { outline: 2px solid #2DA44E; outline-offset: 1px; }
 
   #print-report { display: none; }
   @media print {
@@ -311,10 +311,10 @@
 <style>
   .settings-row {
     display: flex; align-items: center; gap: 12px;
-    background: #1F1D17; border: 1px solid #2D2A22; border-radius: 12px;
+    background: #161B22; border: 1px solid #30363D; border-radius: 12px;
     padding: 14px 16px; font-size: 14px; text-align: left;
   }
-  .settings-row:hover { border-color: #C9974D; }
+  .settings-row:hover { border-color: #2DA44E; }
   .navbtn { font-size: 0; padding: 4px 12px; }
 </style>
 
