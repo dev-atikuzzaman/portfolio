@@ -114,8 +114,23 @@
 
     <div class="bg-surface border border-edge rounded-2xl p-7 shadow-[0_0_70px_-15px_rgba(137,87,229,0.45)]">
 
-      <!-- Step 1: email -->
-      <div id="login-step-email">
+      <!-- Step 1: password login (primary) -->
+      <div id="login-step-password">
+        <label class="text-sm uppercase tracking-wider text-muted font-mono">ইমেইল অ্যাড্রেস</label>
+        <input id="pw-email-input" type="email" placeholder="you@gmail.com"
+          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base placeholder-muted/60">
+        <label class="text-sm uppercase tracking-wider text-muted font-mono mt-4 block">পাসওয়ার্ড</label>
+        <input id="pw-password-input" type="password" placeholder="••••••••"
+          class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base placeholder-muted/60">
+        <p id="pw-error" class="text-rust text-sm mt-2 hidden">ইমেইল বা পাসওয়ার্ড সঠিক নয়।</p>
+        <button onclick="loginWithPassword()" class="w-full mt-4 bg-brass hover:bg-brassdim text-base font-semibold rounded-lg py-4 text-base transition-colors">
+          লগইন করো
+        </button>
+        <button onclick="showOtpEmailStep()" class="w-full mt-3 text-muted text-sm py-2">পাসওয়ার্ড নেই বা ভুলে গেছ? ইমেইল কোড দিয়ে লগইন করো →</button>
+      </div>
+
+      <!-- Step 2: email (for OTP fallback) -->
+      <div id="login-step-email" class="hidden">
         <label class="text-sm uppercase tracking-wider text-muted font-mono">ইমেইল অ্যাড্রেস</label>
         <input id="email-input" type="email" placeholder="you@gmail.com"
           class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base placeholder-muted/60">
@@ -123,9 +138,10 @@
           কোড পাঠাও
         </button>
         <p class="text-muted text-sm mt-4 text-center leading-relaxed">তোমার ইমেইলে একটি ৬-ডিজিট কোড পাঠানো হবে।<br>সেই কোড দিয়ে লগইন ভেরিফাই হবে।</p>
+        <button onclick="showPasswordStep()" class="w-full mt-2 text-muted text-sm py-2">← পাসওয়ার্ড দিয়ে লগইন করো</button>
       </div>
 
-      <!-- Step 2: otp -->
+      <!-- Step 3: otp -->
       <div id="login-step-otp" class="hidden">
         <p class="text-base text-muted mb-1">কোড পাঠানো হয়েছে —</p>
         <p id="sent-to-email" class="text-base text-brass font-mono mb-4"></p>
@@ -181,6 +197,16 @@
     <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </section>
 
+  <!-- QUOTES LIBRARY TAB -->
+  <section id="view-quotes" class="tab-view px-5 py-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-display text-lg">উক্তি ভাণ্ডার</h2>
+      <span class="font-mono text-xs text-muted" id="quotes-count"></span>
+    </div>
+    <div id="quote-categories" class="flex flex-wrap gap-2 mb-4"></div>
+    <div id="quotes-list" class="flex flex-col gap-3"></div>
+  </section>
+
   <!-- SETTINGS TAB -->
   <section id="view-settings" class="tab-view px-5 py-5">
     <h2 class="font-display text-lg mb-4">সেটিংস</h2>
@@ -206,6 +232,10 @@
       <button class="settings-row" onclick="printReport()">
         <svg class="w-5 h-5 text-brass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.055 48.055 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z"/></svg>
         <span>প্রিন্ট / PDF সেভ করো (পড়ার জন্য)</span>
+      </button>
+      <button class="settings-row" onclick="openPasswordModal()">
+        <svg class="w-5 h-5 text-brass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 11-12 0 6 6 0 0112 0zM6.75 21l3-3m0 0l3 3m-3-3v-3.5"/></svg>
+        <span>লগইন পাসওয়ার্ড সেট/পরিবর্তন করো</span>
       </button>
       <button class="settings-row" onclick="openPinModal()">
         <svg class="w-5 h-5 text-brass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
@@ -241,6 +271,10 @@
     <button onclick="switchTab('notes')" data-tab-btn="notes" class="navbtn flex flex-col items-center gap-1 text-muted">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
       <span class="text-[10px] font-mono">নোট</span>
+    </button>
+    <button onclick="switchTab('quotes')" data-tab-btn="quotes" class="navbtn flex flex-col items-center gap-1 text-muted">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+      <span class="text-[10px] font-mono">উক্তি</span>
     </button>
     <button onclick="switchTab('settings')" data-tab-btn="settings" class="navbtn flex flex-col items-center gap-1 text-muted">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.245a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a7.665 7.665 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -306,6 +340,24 @@
   </div>
 </div>
 
+<!-- ============ MODAL: Set Password ============ -->
+<div id="password-modal" class="hidden fixed inset-0 bg-black/60 modal-backdrop z-30 flex items-center justify-center px-5">
+  <div class="bg-surface border border-edge rounded-2xl p-6 w-full max-w-sm">
+    <h3 class="font-display text-lg mb-2">লগইন পাসওয়ার্ড</h3>
+    <p class="text-sm text-muted mb-4">একবার সেট করলে পরের বার থেকে ইমেইল + এই পাসওয়ার্ড দিয়েই সরাসরি লগইন করতে পারবে — ইমেইল কোডের জন্য আর অপেক্ষা করতে হবে না।</p>
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">নতুন পাসওয়ার্ড</label>
+    <input id="new-password-input" type="password" placeholder="কমপক্ষে ৬ ক্যারেক্টার"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">আবার লিখো</label>
+    <input id="confirm-password-input" type="password" placeholder="পাসওয়ার্ড আবার লিখো"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-4">
+    <div class="flex gap-2">
+      <button onclick="closeModal('password-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
+      <button onclick="setPassword()" class="flex-1 bg-brass text-base rounded-lg py-3 text-sm font-semibold">সেভ করো</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ MODAL: Set PIN ============ -->
 <div id="pin-modal" class="hidden fixed inset-0 bg-black/60 modal-backdrop z-30 flex items-center justify-center px-5">
   <div class="bg-surface border border-edge rounded-2xl p-6 w-full max-w-sm">
@@ -320,6 +372,7 @@
   </div>
 </div>
 
+
 <style>
   .settings-row {
     display: flex; align-items: center; gap: 12px;
@@ -327,6 +380,8 @@
     padding: 14px 16px; font-size: 14px; text-align: left;
   }
   .settings-row:hover { border-color: #2DA44E; }
+  .quote-chip { background: transparent; }
+  .quote-chip.active-chip { background: var(--chip-color); color: #0D1117 !important; }
   .navbtn { font-size: 0; padding: 4px 12px; }
 </style>
 
@@ -337,7 +392,9 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reGpmcmphcWV6Y3N2Ymx6bWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4ODg2NzgsImV4cCI6MjA5NzQ2NDY3OH0.cVzwTA11xE3FEqGV9Nz5AI8IOiHHOosJzjqsCuoYF2M';
   const BUCKET = 'portfolio-files';
 
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true }
+  });
 
   let currentUser = null;
   let files = [];
@@ -346,18 +403,34 @@
   let pinHash = null;
   let realtimeChannel = null;
 
-  // ================= Quotes (shown on every screen footer) =================
-  const quotes = [
-    { text: 'নিশ্চয়ই আল্লাহ কাউকে তার সামর্থ্যের অতিরিক্ত বোঝা দেন না।', source: 'কুরআন, সুরা বাকারা ২:২৮৬ (ভাবার্থ)' },
-    { text: 'ধৈর্যশীলদের সাথে আল্লাহ আছেন।', source: 'কুরআন, সুরা বাকারা ২:১৫৩ (ভাবার্থ)' },
-    { text: 'যে আল্লাহর উপর ভরসা রাখে, তিনিই তার জন্য যথেষ্ট।', source: 'কুরআন, সুরা আত-তালাক ৬৫:৩ (ভাবার্থ)' },
-    { text: 'সত্য কথা প্রশান্তি আনে, মিথ্যা উদ্বেগ বাড়ায়।', source: 'হাদিস, তিরমিযি (ভাবার্থ)' },
-    { text: 'কাজের মূল্য নিয়তের উপর নির্ভর করে।', source: 'হাদিস, বুখারি-মুসলিম (ভাবার্থ)' },
-    { text: 'তুমি যা খুঁজছ, তা-ই তোমাকে খুঁজছে।', source: 'জালালুদ্দিন রুমি' },
-    { text: 'মন যে রঙে রঙিন হয়, জীবনও সেই রঙ ধারণ করে।', source: 'মার্কাস অরেলিয়াস, মেডিটেশনস (ভাবার্থ)' },
-    { text: 'নিজেকে জানাই সকল জ্ঞানের শুরু।', source: 'এরিস্টটল (ভাবার্থ)' },
+  // ================= Quotes (footer random pick + full browsable library) =================
+  const quoteLibrary = [
+    { text: 'নিশ্চয়ই আল্লাহ কাউকে তার সামর্থ্যের অতিরিক্ত বোঝা দেন না।', source: 'কুরআন, সুরা বাকারা ২:২৮৬ (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
+    { text: 'ধৈর্যশীলদের সাথে আল্লাহ আছেন।', source: 'কুরআন, সুরা বাকারা ২:১৫৩ (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
+    { text: 'ধৈর্য একটি আলো, যা অন্ধকারেও পথ দেখায়।', source: 'হাদিস, সহীহ মুসলিম (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
+    { text: 'ক্ষত যেখানে, আলো প্রবেশের পথ সেখানেই।', source: 'জালালুদ্দিন রুমি (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
+
+    { text: 'আমি জানি যে আমি কিছুই জানি না।', source: 'সক্রেটিস', category: 'জ্ঞান', color: '#8957E5' },
+    { text: 'কল্পনাশক্তি জ্ঞানের চেয়েও গুরুত্বপূর্ণ।', source: 'আলবার্ট আইনস্টাইন', category: 'জ্ঞান', color: '#8957E5' },
+    { text: 'নিজেকে জানাই সকল জ্ঞানের শুরু।', source: 'এরিস্টটল (ভাবার্থ)', category: 'জ্ঞান', color: '#8957E5' },
+
+    { text: 'সত্য কথা প্রশান্তি আনে, মিথ্যা উদ্বেগ বাড়ায়।', source: 'হাদিস, তিরমিযি (ভাবার্থ)', category: 'সততা', color: '#2DA44E' },
+    { text: 'কাজের মূল্য নিয়তের উপর নির্ভর করে।', source: 'হাদিস, বুখারি-মুসলিম (ভাবার্থ)', category: 'সততা', color: '#2DA44E' },
+    { text: 'সততাই সর্বোৎকৃষ্ট নীতি।', source: 'প্রচলিত প্রবাদ', category: 'সততা', color: '#2DA44E' },
+
+    { text: 'সাফল্যের মানুষ নয়, বরং মূল্যবোধের মানুষ হওয়ার চেষ্টা করো।', source: 'আলবার্ট আইনস্টাইন (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
+    { text: 'আমি ব্যর্থ হইনি — আমি দশ হাজার এমন পদ্ধতি খুঁজে পেয়েছি যা কাজ করে না।', source: 'টমাস এডিসন (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
+    { text: 'যে আল্লাহর উপর ভরসা রাখে, তিনিই তার জন্য যথেষ্ট।', source: 'কুরআন, সুরা আত-তালাক ৬৫:৩ (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
+
+    { text: 'মন যে রঙে রঙিন হয়, জীবনও সেই রঙ ধারণ করে।', source: 'মার্কাস অরেলিয়াস, মেডিটেশনস (ভাবার্থ)', category: 'জীবন', color: '#F85149' },
+    { text: 'তুমি যা খুঁজছ, তা-ই তোমাকে খুঁজছে।', source: 'জালালুদ্দিন রুমি', category: 'জীবন', color: '#F85149' },
+    { text: 'যে জীবন পরীক্ষা করে দেখা হয়নি, তা যাপনযোগ্য নয়।', source: 'সক্রেটিস (ভাবার্থ)', category: 'জীবন', color: '#F85149' },
+
+    { text: 'ছোট ছোট কাজ, কিন্তু গভীর ভালোবাসায় করো।', source: 'মাদার তেরেসা (ভাবার্থ)', category: 'ভালোবাসা', color: '#DB61A2' },
+    { text: 'তোমাদের মধ্যে সে-ই উত্তম, যে মানুষের জন্য উপকারী।', source: 'হাদিস (ভাবার্থ)', category: 'ভালোবাসা', color: '#DB61A2' },
   ];
-  const todaysQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  const quoteCategories = [...new Set(quoteLibrary.map(q => q.category))];
+  const todaysQuote = quoteLibrary[Math.floor(Math.random() * quoteLibrary.length)];
 
   function renderQuoteFooters() {
     document.querySelectorAll('.quote-footer').forEach((el) => {
@@ -365,6 +438,44 @@
     });
   }
   renderQuoteFooters();
+
+  function renderQuoteCategories() {
+    const wrap = document.getElementById('quote-categories');
+    const chips = [{ name: 'সব', color: '#8B949E' }, ...quoteCategories.map(c => ({
+      name: c, color: quoteLibrary.find(q => q.category === c).color
+    }))];
+    wrap.innerHTML = chips.map(c => `
+      <button onclick="filterQuotes('${c.name}')" data-cat="${c.name}"
+        class="quote-chip px-3 py-1.5 rounded-full text-sm font-mono border transition-colors"
+        style="--chip-color:${c.color}; border-color:${c.color}; color:${c.name === 'সব' ? '#C9D1D9' : c.color};">${c.name}</button>
+    `).join('');
+    document.querySelector('.quote-chip[data-cat="সব"]').classList.add('active-chip');
+    document.querySelector('.quote-chip[data-cat="সব"]').style.setProperty('--chip-color', '#C9D1D9');
+  }
+
+  function renderQuotesList(filter) {
+    const items = (!filter || filter === 'সব') ? quoteLibrary : quoteLibrary.filter(q => q.category === filter);
+    document.getElementById('quotes-list').innerHTML = items.map(q => `
+      <div class="bg-surface border-y border-r rounded-r-xl p-4" style="border-color:${q.color}33; border-left:4px solid ${q.color};">
+        <p class="text-base leading-relaxed text-ink">“${q.text}”</p>
+        <div class="flex items-center justify-between mt-3">
+          <span class="font-mono text-xs text-muted">— ${q.source}</span>
+          <span class="text-xs font-mono px-2 py-0.5 rounded-full" style="background:${q.color}22; color:${q.color};">${q.category}</span>
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('quotes-count').textContent = items.length + ' টি উক্তি';
+  }
+
+  function filterQuotes(cat) {
+    document.querySelectorAll('.quote-chip').forEach(b => {
+      b.classList.toggle('active-chip', b.dataset.cat === cat);
+    });
+    renderQuotesList(cat);
+  }
+
+  renderQuoteCategories();
+  renderQuotesList('সব');
 
   const typeIcon = {
     image: '<svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 4.5h18M3 4.5v15a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19.5v-15M3 4.5V3m18 1.5V3M8.25 9.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>',
@@ -374,6 +485,31 @@
   };
 
   // ================= Auth =================
+  function showOtpEmailStep() {
+    document.getElementById('login-step-password').classList.add('hidden');
+    document.getElementById('login-step-email').classList.remove('hidden');
+  }
+
+  function showPasswordStep() {
+    document.getElementById('login-step-email').classList.add('hidden');
+    document.getElementById('login-step-otp').classList.add('hidden');
+    document.getElementById('login-step-password').classList.remove('hidden');
+  }
+
+  async function loginWithPassword() {
+    const email = document.getElementById('pw-email-input').value.trim();
+    const password = document.getElementById('pw-password-input').value;
+    const errEl = document.getElementById('pw-error');
+    errEl.classList.add('hidden');
+    if (!email.includes('@') || !password) { alert('ইমেইল ও পাসওয়ার্ড দাও'); return; }
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      errEl.classList.remove('hidden');
+      return;
+    }
+    await enterApp(data.user);
+  }
+
   async function sendOtp() {
     const email = document.getElementById('email-input').value.trim();
     if (!email.includes('@')) { alert('সঠিক ইমেইল দাও'); return; }
@@ -417,14 +553,33 @@
     currentUser = null; files = []; notes = []; pinHash = null;
     document.getElementById('app-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('login-step-otp').classList.add('hidden');
-    document.getElementById('login-step-email').classList.remove('hidden');
+    showPasswordStep();
+    document.getElementById('pw-email-input').value = '';
+    document.getElementById('pw-password-input').value = '';
     document.getElementById('email-input').value = '';
     document.getElementById('otp-input').value = '';
     document.getElementById('otp-error').classList.add('hidden');
+    document.getElementById('pw-error').classList.add('hidden');
   }
 
+  // ================= Set / change password (from Settings) =================
+  async function setPassword() {
+    const pw1 = document.getElementById('new-password-input').value;
+    const pw2 = document.getElementById('confirm-password-input').value;
+    if (pw1.length < 6) { alert('পাসওয়ার্ড কমপক্ষে ৬ ক্যারেক্টার হতে হবে।'); return; }
+    if (pw1 !== pw2) { alert('দুই পাসওয়ার্ড মিলছে না।'); return; }
+    const { error } = await sb.auth.updateUser({ password: pw1 });
+    if (error) { alert('পাসওয়ার্ড সেভ করতে সমস্যা: ' + error.message); return; }
+    document.getElementById('new-password-input').value = '';
+    document.getElementById('confirm-password-input').value = '';
+    closeModal('password-modal');
+    alert('পাসওয়ার্ড সেভ হয়েছে। এখন থেকে ইমেইল + এই পাসওয়ার্ড দিয়েই লগইন করতে পারবে।');
+  }
+
+  function openPasswordModal() { openModal('password-modal'); }
+
   // Auto-restore session on reload / new device with saved session
+  // (persistSession + autoRefreshToken are on by default in supabase-js v2 — তাই লগআউট না করা পর্যন্ত সেশন থাকবে)
   (async () => {
     const { data } = await sb.auth.getSession();
     if (data.session?.user) await enterApp(data.session.user);
@@ -658,7 +813,7 @@
     document.querySelectorAll('.navbtn').forEach(b => b.classList.add('text-muted'));
     document.querySelector(`[data-tab-btn="${tab}"]`).classList.remove('text-muted');
     document.querySelector(`[data-tab-btn="${tab}"]`).classList.add('text-brass');
-    document.getElementById('fab').style.display = (tab === 'settings') ? 'none' : 'flex';
+    document.getElementById('fab').style.display = (tab === 'settings' || tab === 'quotes') ? 'none' : 'flex';
     window.currentTab = tab;
   }
 
