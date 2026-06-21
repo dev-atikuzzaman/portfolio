@@ -59,6 +59,25 @@
   .animate-spin-slow { animation: spin-slow 8s linear infinite; }
   .modal-backdrop { backdrop-filter: blur(4px); }
   input:focus, button:focus, textarea:focus { outline: 2px solid #C9974D; outline-offset: 1px; }
+
+  #print-report { display: none; }
+  @media print {
+    body * { visibility: hidden; }
+    #print-report, #print-report * { visibility: visible; }
+    #print-report {
+      display: block !important;
+      position: absolute; top: 0; left: 0; width: 100%;
+      background: #fff; color: #111; padding: 24px;
+      font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    }
+    #print-report h1 { font-family: 'Fraunces', serif; font-size: 22px; margin-bottom: 4px; }
+    #print-report .pr-meta { font-size: 11px; color: #555; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; }
+    #print-report h2 { font-size: 15px; margin: 18px 0 8px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+    #print-report .pr-item { padding: 8px 0; border-bottom: 1px solid #eee; }
+    #print-report .pr-title { font-weight: 600; font-size: 13px; }
+    #print-report .pr-body { font-size: 12px; color: #333; margin-top: 2px; }
+    #print-report .pr-date { font-size: 10px; color: #777; font-family: 'JetBrains Mono', monospace; margin-top: 3px; }
+  }
 </style>
 </head>
 <body class="bg-base text-ink min-h-screen">
@@ -173,6 +192,10 @@
         <span>ব্যাকআপ ইম্পোর্ট করো (নোট)</span>
       </button>
       <input id="import-file-input" type="file" accept="application/json" class="hidden" onchange="importBackup(event)">
+      <button class="settings-row" onclick="printReport()">
+        <svg class="w-5 h-5 text-brass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.055 48.055 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z"/></svg>
+        <span>প্রিন্ট / PDF সেভ করো (পড়ার জন্য)</span>
+      </button>
       <button class="settings-row" onclick="openPinModal()">
         <svg class="w-5 h-5 text-brass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
         <span>ডিলিট প্রোটেকশন PIN সেট করো</span>
@@ -298,8 +321,8 @@
 <script>
   // ================= SUPABASE CONFIG =================
   // এখানে তোমার Supabase প্রজেক্টের URL আর anon key পেস্ট করো (Project Settings → API)
-  const SUPABASE_URL = 'https://okxjfrjaqezcsvblzmdw.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9reGpmcmphcWV6Y3N2Ymx6bWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4ODg2NzgsImV4cCI6MjA5NzQ2NDY3OH0.cVzwTA11xE3FEqGV9Nz5AI8IOiHHOosJzjqsCuoYF2M';
+  const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
   const BUCKET = 'portfolio-files';
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -483,7 +506,7 @@
         <div class="bg-surface border-l-4 border-${color} border-y border-r border-edge rounded-r-xl p-4">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
-              <h3 class="font-display text-base mb-1 truncate">${n.title}</h3>
+              <h3 class="font-display font-semibold text-lg text-ink mb-1 truncate">${n.title}</h3>
               <p class="text-sm text-muted line-clamp-2">${n.body || ''}</p>
             </div>
             <button onclick="askDelete('note', '${n.id}', '${n.title.replace(/'/g, "\\'")}')" class="text-muted hover:text-rust p-1 shrink-0">
@@ -640,13 +663,51 @@
   window.addEventListener('offline', updateOnlineStatus);
   updateOnlineStatus();
 
-  // ================= Service Worker (PWA offline + installable) =================
+  // ================= Print / PDF (read-only report, not a backup format) =================
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function printReport() {
+    const generatedAt = new Date().toLocaleString('bn-BD');
+    const notesHtml = notes.length
+      ? notes.map(n => `
+          <div class="pr-item">
+            <div class="pr-title">${escapeHtml(n.title)}</div>
+            <div class="pr-body">${escapeHtml(n.body)}</div>
+            <div class="pr-date">${new Date(n.created_at).toLocaleDateString('bn-BD')}</div>
+          </div>`).join('')
+      : '<p style="font-size:12px;color:#777;">কোনো নোট নেই</p>';
+
+    const filesHtml = files.length
+      ? files.map(f => `
+          <div class="pr-item">
+            <div class="pr-title">${escapeHtml(f.file_name)} <span style="color:#888;font-size:11px;">(${f.file_type})</span></div>
+            <div class="pr-date">${new Date(f.uploaded_at).toLocaleDateString('bn-BD')}</div>
+          </div>`).join('')
+      : '<p style="font-size:12px;color:#777;">কোনো ফাইল নেই</p>';
+
+    document.getElementById('print-report').innerHTML = `
+      <h1>ভল্ট — সারসংক্ষেপ রিপোর্ট</h1>
+      <p class="pr-meta">তৈরি হয়েছে: ${generatedAt} · ${currentUser?.email || ''}</p>
+      <h2>📝 নোট (${notes.length})</h2>
+      ${notesHtml}
+      <h2>📁 ফাইল তালিকা (${files.length})</h2>
+      ${filesHtml}
+      <p style="font-size:10px;color:#999;margin-top:20px;">এই রিপোর্ট শুধু পড়ার/প্রিন্টের জন্য — ব্যাকআপ/রিস্টোরের জন্য Export (JSON) ব্যবহার করো।</p>
+    `;
+    window.print();
+  }
+
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch((err) => console.error('SW registration failed:', err));
     });
   }
 </script>
+
+<div id="print-report"></div>
 
 </body>
 </html>
