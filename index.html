@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>ভল্ট — প্রাইভেট পোর্টফোলিও</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -22,7 +22,7 @@
           surface2: '#1B2240',
           brass: '#2DA44E',
           brassdim: '#2C974B',
-          ink: '#C9D1D9',
+          ink: '#E9EDF1',
           muted: '#8B949E',
           sage: '#58A6FF',
           rust: '#F85149',
@@ -30,7 +30,7 @@
         },
         fontFamily: {
           display: ['Fraunces', 'serif'],
-          body: ['Inter', 'Noto Sans Bengali', 'sans-serif'],
+          body: ['Inter', 'Hind Siliguri', 'sans-serif'],
           mono: ['JetBrains Mono', 'monospace'],
         }
       }
@@ -39,7 +39,7 @@
 </script>
 <style>
   html, body { overflow-x: hidden; max-width: 100vw; }
-  body { font-family: 'Inter', 'Noto Sans Bengali', sans-serif; }
+  body { font-family: 'Inter', 'Hind Siliguri', sans-serif; }
   .modal-backdrop > div { max-height: 90dvh; overflow-y: auto; }
   .font-display { font-family: 'Fraunces', 'Noto Sans Bengali', serif; }
   .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -77,7 +77,7 @@
       display: block !important;
       position: absolute; top: 0; left: 0; width: 100%;
       background: #fff; color: #111; padding: 24px;
-      font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+      font-family: 'Inter', 'Hind Siliguri', sans-serif;
     }
     #print-report h1 { font-family: 'Fraunces', serif; font-size: 22px; margin-bottom: 4px; }
     #print-report .pr-meta { font-size: 11px; color: #555; margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; }
@@ -197,12 +197,27 @@
     <p class="quote-footer text-center text-muted/80 text-sm mt-6 italic leading-relaxed px-2"></p>
   </section>
 
+  <!-- EVENTS / TASKS REMINDER TAB -->
+  <section id="view-events" class="tab-view px-5 py-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-display text-lg">ইভেন্ট ও টাস্ক</h2>
+      <span class="font-mono text-xs text-muted" id="events-count"></span>
+    </div>
+    <div id="notif-permission-banner" class="hidden bg-surface border border-edge rounded-xl p-3 mb-4 flex items-center justify-between gap-3">
+      <span class="text-sm text-muted">রিমাইন্ডার পেতে নোটিফিকেশন অনুমতি দাও</span>
+      <button onclick="requestNotifPermission()" class="text-sm font-semibold text-brass shrink-0">অনুমতি দাও</button>
+    </div>
+    <div id="events-list" class="flex flex-col gap-3"></div>
+  </section>
+
   <!-- QUOTES LIBRARY TAB -->
   <section id="view-quotes" class="tab-view px-5 py-5">
     <div class="flex items-center justify-between mb-4">
       <h2 class="font-display text-lg">উক্তি ভাণ্ডার</h2>
       <span class="font-mono text-xs text-muted" id="quotes-count"></span>
     </div>
+    <input id="quote-search" type="text" placeholder="🔍 উক্তি, উৎস বা বিষয় খুঁজো..." oninput="searchQuotes(this.value)"
+      class="w-full mb-4 bg-surface2 border border-edge rounded-lg px-5 py-3 text-base text-ink placeholder-muted/60">
     <div id="quote-categories" class="flex flex-wrap gap-2 mb-4"></div>
     <div id="quotes-list" class="flex flex-col gap-3"></div>
   </section>
@@ -272,6 +287,10 @@
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
       <span class="text-[10px] font-mono">নোট</span>
     </button>
+    <button onclick="switchTab('events')" data-tab-btn="events" class="navbtn flex flex-col items-center gap-1 text-muted">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008z"/></svg>
+      <span class="text-[10px] font-mono">ইভেন্ট</span>
+    </button>
     <button onclick="switchTab('quotes')" data-tab-btn="quotes" class="navbtn flex flex-col items-center gap-1 text-muted">
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
       <span class="text-[10px] font-mono">উক্তি</span>
@@ -320,6 +339,44 @@
     <div class="flex gap-2">
       <button onclick="closeModal('note-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
       <button onclick="addNote()" class="flex-1 bg-brass text-base rounded-lg py-3 text-sm font-semibold">সেভ করো</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: New Event/Task ============ -->
+<div id="event-modal" class="hidden fixed inset-0 bg-black/60 modal-backdrop z-30 flex items-center justify-center px-5">
+  <div class="bg-surface border border-edge rounded-2xl p-6 w-full max-w-sm max-h-[90dvh] overflow-y-auto">
+    <h3 class="font-display text-lg mb-4">নতুন ইভেন্ট/টাস্ক</h3>
+
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">বিষয়</label>
+    <input id="new-event-title" type="text" placeholder="যেমন: ব্যাংকে যাওয়া, মিটিং"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">তারিখ ও সময়</label>
+    <input id="new-event-datetime" type="datetime-local"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">বিস্তারিত (ঐচ্ছিক)</label>
+    <textarea id="new-event-desc" placeholder="বিস্তারিত লিখো..." rows="3"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3 resize-none"></textarea>
+
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">ছবি (ঐচ্ছিক)</label>
+    <input id="new-event-image" type="file" accept="image/*"
+      class="w-full mt-2 text-sm text-muted mb-3">
+
+    <label class="text-sm uppercase tracking-wider text-muted font-mono">কত মিনিট আগে রিমাইন্ড করবে?</label>
+    <input id="new-event-remind" type="number" min="1" value="30"
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-2">
+    <div class="flex gap-2 mb-4 flex-wrap">
+      <button onclick="document.getElementById('new-event-remind').value=15" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">১৫ মিনিট</button>
+      <button onclick="document.getElementById('new-event-remind').value=30" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">৩০ মিনিট</button>
+      <button onclick="document.getElementById('new-event-remind').value=60" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">১ ঘণ্টা</button>
+      <button onclick="document.getElementById('new-event-remind').value=1440" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">১ দিন</button>
+    </div>
+
+    <div class="flex gap-2">
+      <button onclick="closeModal('event-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
+      <button onclick="addEvent(this)" class="flex-1 bg-brass text-base rounded-lg py-3 text-sm font-semibold">সেভ করো</button>
     </div>
   </div>
 </div>
@@ -399,38 +456,110 @@
   let currentUser = null;
   let files = [];
   let notes = [];
+  let events = [];
   let pendingDelete = null;
   let pinHash = null;
   let realtimeChannel = null;
+  let reminderInterval = null;
+  let notifiedThisSession = new Set();
 
   // ================= Quotes (footer random pick + full browsable library) =================
   const quoteLibrary = [
+    // ধৈর্য
     { text: 'নিশ্চয়ই আল্লাহ কাউকে তার সামর্থ্যের অতিরিক্ত বোঝা দেন না।', source: 'কুরআন, সুরা বাকারা ২:২৮৬ (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
     { text: 'ধৈর্যশীলদের সাথে আল্লাহ আছেন।', source: 'কুরআন, সুরা বাকারা ২:১৫৩ (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
     { text: 'ধৈর্য একটি আলো, যা অন্ধকারেও পথ দেখায়।', source: 'হাদিস, সহীহ মুসলিম (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
-    { text: 'ক্ষত যেখানে, আলো প্রবেশের পথ সেখানেই।', source: 'জালালুদ্দিন রুমি (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
+    { text: 'কষ্টের সাথেই স্বস্তি জড়িয়ে আছে।', source: 'কুরআন, সুরা আশ-শারহ ৯৪:৫-৬ (ভাবার্থ)', category: 'ধৈর্য', color: '#58A6FF' },
 
+    // জ্ঞান
     { text: 'আমি জানি যে আমি কিছুই জানি না।', source: 'সক্রেটিস', category: 'জ্ঞান', color: '#8957E5' },
     { text: 'কল্পনাশক্তি জ্ঞানের চেয়েও গুরুত্বপূর্ণ।', source: 'আলবার্ট আইনস্টাইন', category: 'জ্ঞান', color: '#8957E5' },
     { text: 'নিজেকে জানাই সকল জ্ঞানের শুরু।', source: 'এরিস্টটল (ভাবার্থ)', category: 'জ্ঞান', color: '#8957E5' },
+    { text: 'জ্ঞান ছাড়া কাজ পথভ্রষ্টতার মতো।', source: 'ইমাম গাজ্জালী (ভাবার্থ)', category: 'জ্ঞান', color: '#8957E5' },
 
+    // সততা
     { text: 'সত্য কথা প্রশান্তি আনে, মিথ্যা উদ্বেগ বাড়ায়।', source: 'হাদিস, তিরমিযি (ভাবার্থ)', category: 'সততা', color: '#2DA44E' },
     { text: 'কাজের মূল্য নিয়তের উপর নির্ভর করে।', source: 'হাদিস, বুখারি-মুসলিম (ভাবার্থ)', category: 'সততা', color: '#2DA44E' },
     { text: 'সততাই সর্বোৎকৃষ্ট নীতি।', source: 'প্রচলিত প্রবাদ', category: 'সততা', color: '#2DA44E' },
 
+    // সাফল্য
     { text: 'সাফল্যের মানুষ নয়, বরং মূল্যবোধের মানুষ হওয়ার চেষ্টা করো।', source: 'আলবার্ট আইনস্টাইন (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
     { text: 'আমি ব্যর্থ হইনি — আমি দশ হাজার এমন পদ্ধতি খুঁজে পেয়েছি যা কাজ করে না।', source: 'টমাস এডিসন (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
     { text: 'যে আল্লাহর উপর ভরসা রাখে, তিনিই তার জন্য যথেষ্ট।', source: 'কুরআন, সুরা আত-তালাক ৬৫:৩ (ভাবার্থ)', category: 'সাফল্য', color: '#D29922' },
 
+    // জীবন
     { text: 'মন যে রঙে রঙিন হয়, জীবনও সেই রঙ ধারণ করে।', source: 'মার্কাস অরেলিয়াস, মেডিটেশনস (ভাবার্থ)', category: 'জীবন', color: '#F85149' },
     { text: 'তুমি যা খুঁজছ, তা-ই তোমাকে খুঁজছে।', source: 'জালালুদ্দিন রুমি', category: 'জীবন', color: '#F85149' },
     { text: 'যে জীবন পরীক্ষা করে দেখা হয়নি, তা যাপনযোগ্য নয়।', source: 'সক্রেটিস (ভাবার্থ)', category: 'জীবন', color: '#F85149' },
 
+    // ভালোবাসা
     { text: 'ছোট ছোট কাজ, কিন্তু গভীর ভালোবাসায় করো।', source: 'মাদার তেরেসা (ভাবার্থ)', category: 'ভালোবাসা', color: '#DB61A2' },
     { text: 'তোমাদের মধ্যে সে-ই উত্তম, যে মানুষের জন্য উপকারী।', source: 'হাদিস (ভাবার্থ)', category: 'ভালোবাসা', color: '#DB61A2' },
+    { text: 'তোমার সন্তান তোমার নয় — তারা জীবনের আকাঙ্ক্ষার মধ্য দিয়ে এসেছে।', source: 'কাহলিল জিবরান, দ্য প্রফেট (ভাবার্থ)', category: 'ভালোবাসা', color: '#DB61A2' },
+
+    // ইসলাম
+    { text: 'আল্লাহর স্মরণেই অন্তর প্রকৃত প্রশান্তি পায়।', source: 'কুরআন, সুরা রা\'দ ১৩:২৮ (ভাবার্থ)', category: 'ইসলাম', color: '#3FB950' },
+    { text: 'আল্লাহ তোমাদের চেহারা বা সম্পদ দেখেন না, দেখেন তোমাদের অন্তর ও কর্ম।', source: 'হাদিস, সহীহ মুসলিম (ভাবার্থ)', category: 'ইসলাম', color: '#3FB950' },
+    { text: 'তোমাদের মধ্যে সে-ই উত্তম মুসলিম, যার আচরণে অন্যরা নিরাপদ থাকে।', source: 'হাদিস, বুখারি (ভাবার্থ)', category: 'ইসলাম', color: '#3FB950' },
+    { text: 'প্রতিটি ক্ষতের ভেতরেই আলো প্রবেশের একটি দরজা থাকে।', source: 'জালালুদ্দিন রুমি (ভাবার্থ)', category: 'ইসলাম', color: '#3FB950' },
+    { text: 'আল্লাহ সৎকর্মশীলদের ভালোবাসেন।', source: 'কুরআন, সুরা বাকারা ২:১৯৫ (ভাবার্থ)', category: 'ইসলাম', color: '#3FB950' },
+
+    // হিন্দু ধর্ম
+    { text: 'কর্মেই তোমার অধিকার, ফলাফলে নয়।', source: 'ভগবদ্গীতা ২:৪৭ (ভাবার্থ)', category: 'হিন্দু ধর্ম', color: '#FF7B72' },
+    { text: 'সুখ-দুঃখ আসে আর যায় — উভয়কেই সহনশীলতার সাথে গ্রহণ করো।', source: 'ভগবদ্গীতা ২:১৪ (ভাবার্থ)', category: 'হিন্দু ধর্ম', color: '#FF7B72' },
+    { text: 'অসত্য থেকে আমাকে সত্যের দিকে নিয়ে চলো; আঁধার থেকে আলোর দিকে।', source: 'বৃহদারণ্যক উপনিষদ (ভাবার্থ)', category: 'হিন্দু ধর্ম', color: '#FF7B72' },
+    { text: 'উঠো, জাগো, লক্ষ্যে পৌঁছানো পর্যন্ত থেমো না।', source: 'স্বামী বিবেকানন্দ', category: 'হিন্দু ধর্ম', color: '#FF7B72' },
+    { text: 'অহিংসাই মানবতার সর্বোচ্চ ধর্ম।', source: 'মহাত্মা গান্ধী (ভাবার্থ)', category: 'হিন্দু ধর্ম', color: '#FF7B72' },
+
+    // খ্রিস্টান ধর্ম
+    { text: 'তুমি অন্যের কাছে যা প্রত্যাশা করো, তা-ই তাদের সাথে করো।', source: 'বাইবেল, মথি ৭:১২ (ভাবার্থ)', category: 'খ্রিস্টান ধর্ম', color: '#79C0FF' },
+    { text: 'প্রকৃত ভালোবাসা ধৈর্যশীল ও দয়ালু।', source: 'বাইবেল, ১ করিন্থীয় ১৩:৪ (ভাবার্থ)', category: 'খ্রিস্টান ধর্ম', color: '#79C0FF' },
+    { text: 'প্রভু আমার পালক — আমার কোনো অভাব হবে না।', source: 'বাইবেল, সাম ২৩:১ (ভাবার্থ)', category: 'খ্রিস্টান ধর্ম', color: '#79C0FF' },
+    { text: 'আমাদের হৃদয় ততক্ষণ অস্থির থাকে, যতক্ষণ না তা ঈশ্বরে বিশ্রাম পায়।', source: 'সেন্ট অগাস্টিন, কনফেশনস (ভাবার্থ)', category: 'খ্রিস্টান ধর্ম', color: '#79C0FF' },
+
+    // বৌদ্ধ ধর্ম
+    { text: 'মন দিয়েই সব কিছুর সূচনা — বিশুদ্ধ মনেই প্রকৃত সুখ।', source: 'ধম্মপদ (ভাবার্থ)', category: 'বৌদ্ধ ধর্ম', color: '#FFA657' },
+    { text: 'নিজের আলো নিজেই হও।', source: 'গৌতম বুদ্ধ, মহাপরিনির্বাণ সূত্র (ভাবার্থ)', category: 'বৌদ্ধ ধর্ম', color: '#FFA657' },
+    { text: 'ক্রোধ ধরে রাখা মানে বিষ পান করে অন্যের ক্ষতি কামনা করা।', source: 'গৌতম বুদ্ধ (ভাবার্থ)', category: 'বৌদ্ধ ধর্ম', color: '#FFA657' },
+    { text: 'শ্বাসই বর্তমান ক্ষণে ফিরে আসার সেতু।', source: 'থিচ নাট হান (ভাবার্থ)', category: 'বৌদ্ধ ধর্ম', color: '#FFA657' },
+    { text: 'করুণাই হলো প্রকৃত ধর্ম।', source: 'দালাই লামা (ভাবার্থ)', category: 'বৌদ্ধ ধর্ম', color: '#FFA657' },
+
+    // বিজ্ঞান
+    { text: 'আমি দৈত্যদের কাঁধে দাঁড়িয়ে দূরে দেখেছি।', source: 'আইজ্যাক নিউটন', category: 'বিজ্ঞান', color: '#56D4DD' },
+    { text: 'জীবনে ভয় পাওয়ার কিছু নেই, শুধু বোঝার আছে।', source: 'মারি কুরি', category: 'বিজ্ঞান', color: '#56D4DD' },
+    { text: 'বুদ্ধিমত্তা হলো পরিবর্তনের সাথে খাপ খাওয়ানোর সামর্থ্য।', source: 'স্টিফেন হকিং (ভাবার্থ)', category: 'বিজ্ঞান', color: '#56D4DD' },
+    { text: 'তুমি কাউকে কিছু শেখাতে পারো না, শুধু নিজে খুঁজে পেতে সাহায্য করতে পারো।', source: 'গ্যালিলিও গ্যালিলি (ভাবার্থ)', category: 'বিজ্ঞান', color: '#56D4DD' },
+
+    // ইতিহাস
+    { text: 'জনগণের, জনগণের দ্বারা, জনগণের জন্য সরকার।', source: 'আব্রাহাম লিংকন, গেটিসবার্গ ভাষণ', category: 'ইতিহাস', color: '#C2A36B' },
+    { text: 'শিক্ষাই বিশ্ব পরিবর্তনের সবচেয়ে শক্তিশালী হাতিয়ার।', source: 'নেলসন ম্যান্ডেলা (ভাবার্থ)', category: 'ইতিহাস', color: '#C2A36B' },
+    { text: 'সাফল্য নয়, বরং ব্যর্থতার পরেও এগিয়ে যাওয়ার সাহসটাই গুরুত্বপূর্ণ।', source: 'উইনস্টন চার্চিল (ভাবার্থ)', category: 'ইতিহাস', color: '#C2A36B' },
+    { text: 'আঁধার আঁধারকে দূর করতে পারে না, একমাত্র আলোই পারে।', source: 'মার্টিন লুথার কিং জুনিয়র (ভাবার্থ)', category: 'ইতিহাস', color: '#C2A36B' },
+
+    // রাজনীতি
+    { text: 'যেকোনো স্থানের অন্যায়ই সর্বত্র ন্যায়বিচারের জন্য হুমকি।', source: 'মার্টিন লুথার কিং জুনিয়র, লেটার ফ্রম বার্মিংহাম জেল (ভাবার্থ)', category: 'রাজনীতি', color: '#A371F7' },
+    { text: 'শিক্ষাই বিশ্ব পরিবর্তনের সবচেয়ে শক্তিশালী হাতিয়ার।', source: 'নেলসন ম্যান্ডেলা (ভাবার্থ)', category: 'রাজনীতি', color: '#A371F7' },
+    { text: 'জনগণের, জনগণের দ্বারা, জনগণের জন্য সরকার।', source: 'আব্রাহাম লিংকন, গেটিসবার্গ ভাষণ', category: 'রাজনীতি', color: '#A371F7' },
+
+    // মনোবিজ্ঞান
+    { text: 'অন্ধকারকে আলো দিয়ে নয়, সচেতন করে জয় করতে হয়।', source: 'কার্ল ইয়ুং (ভাবার্থ)', category: 'মনোবিজ্ঞান', color: '#F2CC60' },
+    { text: 'যার কাছে \'কেন বাঁচতে হবে\' এই প্রশ্নের উত্তর আছে, সে প্রায় সব \'কীভাবে\'-ই সহ্য করতে পারে।', source: 'ভিক্টর ফ্র্যাংকল, ম্যানস সার্চ ফর মিনিং (ভাবার্থ)', category: 'মনোবিজ্ঞান', color: '#F2CC60' },
+    { text: 'যার হাতে কেবল একটা হাতুড়ি আছে, সে প্রতিটি সমস্যাকেই পেরেক মনে করে।', source: 'আব্রাহাম মাসলো (ভাবার্থ)', category: 'মনোবিজ্ঞান', color: '#F2CC60' },
+
+    // নিউরোলজি
+    { text: 'যতদিন মস্তিষ্ক রহস্যময় থাকবে, ততদিন মানুষও রহস্যময় থেকে যাবে।', source: 'সান্তিয়াগো রামোন ই কাহাল (ভাবার্থ)', category: 'নিউরোলজি', color: '#FF6B9D' },
+    { text: 'প্রতিটি রোগীর মধ্যেই একটি গল্প থাকে — যা প্রায়ই রোগ নির্ণয়ের চেয়েও গুরুত্বপূর্ণ।', source: 'অলিভার স্যাকস (ভাবার্থ)', category: 'নিউরোলজি', color: '#FF6B9D' },
+    { text: 'অনুভূতি ছাড়া যুক্তিও অসম্পূর্ণ থেকে যায়।', source: 'আন্তোনিও দামাসিও (ভাবার্থ)', category: 'নিউরোলজি', color: '#FF6B9D' },
+
+    // আধ্যাত্মিকতা
+    { text: 'এই মুহূর্তই তোমার একমাত্র সত্যিকারের মালিকানা।', source: 'একহার্ট টোল, দ্য পাওয়ার অব নাও (ভাবার্থ)', category: 'আধ্যাত্মিকতা', color: '#B392F0' },
+    { text: 'শ্বাসই বর্তমান ক্ষণে ফিরে আসার সেতু।', source: 'থিচ নাট হান (ভাবার্থ)', category: 'আধ্যাত্মিকতা', color: '#B392F0' },
+    { text: 'তুমি যা খুঁজছ, তা-ই তোমাকে খুঁজছে।', source: 'জালালুদ্দিন রুমি', category: 'আধ্যাত্মিকতা', color: '#B392F0' },
   ];
   const quoteCategories = [...new Set(quoteLibrary.map(q => q.category))];
   const todaysQuote = quoteLibrary[Math.floor(Math.random() * quoteLibrary.length)];
+  let activeQuoteCategory = 'সব';
+  let activeQuoteSearch = '';
 
   function renderQuoteFooters() {
     document.querySelectorAll('.quote-footer').forEach((el) => {
@@ -447,15 +576,23 @@
     wrap.innerHTML = chips.map(c => `
       <button onclick="filterQuotes('${c.name}')" data-cat="${c.name}"
         class="quote-chip px-3 py-1.5 rounded-full text-sm font-mono border transition-colors"
-        style="--chip-color:${c.color}; border-color:${c.color}; color:${c.name === 'সব' ? '#C9D1D9' : c.color};">${c.name}</button>
+        style="--chip-color:${c.color}; border-color:${c.color}; color:${c.name === 'সব' ? '#E9EDF1' : c.color};">${c.name}</button>
     `).join('');
     document.querySelector('.quote-chip[data-cat="সব"]').classList.add('active-chip');
-    document.querySelector('.quote-chip[data-cat="সব"]').style.setProperty('--chip-color', '#C9D1D9');
+    document.querySelector('.quote-chip[data-cat="সব"]').style.setProperty('--chip-color', '#E9EDF1');
   }
 
-  function renderQuotesList(filter) {
-    const items = (!filter || filter === 'সব') ? quoteLibrary : quoteLibrary.filter(q => q.category === filter);
-    document.getElementById('quotes-list').innerHTML = items.map(q => `
+  function renderQuotesList() {
+    let items = (activeQuoteCategory === 'সব') ? quoteLibrary : quoteLibrary.filter(q => q.category === activeQuoteCategory);
+    const term = activeQuoteSearch.trim().toLowerCase();
+    if (term) {
+      items = items.filter(q =>
+        q.text.toLowerCase().includes(term) ||
+        q.source.toLowerCase().includes(term) ||
+        q.category.toLowerCase().includes(term)
+      );
+    }
+    document.getElementById('quotes-list').innerHTML = items.length ? items.map(q => `
       <div class="bg-surface border-y border-r rounded-r-xl p-4" style="border-color:${q.color}33; border-left:4px solid ${q.color};">
         <p class="text-base leading-relaxed text-ink">“${q.text}”</p>
         <div class="flex items-center justify-between mt-3">
@@ -463,19 +600,25 @@
           <span class="text-xs font-mono px-2 py-0.5 rounded-full" style="background:${q.color}22; color:${q.color};">${q.category}</span>
         </div>
       </div>
-    `).join('');
+    `).join('') : '<p class="text-muted text-sm text-center py-6">কোনো উক্তি পাওয়া যায়নি</p>';
     document.getElementById('quotes-count').textContent = items.length + ' টি উক্তি';
   }
 
   function filterQuotes(cat) {
+    activeQuoteCategory = cat;
     document.querySelectorAll('.quote-chip').forEach(b => {
       b.classList.toggle('active-chip', b.dataset.cat === cat);
     });
-    renderQuotesList(cat);
+    renderQuotesList();
+  }
+
+  function searchQuotes(value) {
+    activeQuoteSearch = value;
+    renderQuotesList();
   }
 
   renderQuoteCategories();
-  renderQuotesList('সব');
+  renderQuotesList();
 
   const typeIcon = {
     image: '<svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 4.5h18M3 4.5v15a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 19.5v-15M3 4.5V3m18 1.5V3M8.25 9.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>',
@@ -543,14 +686,19 @@
     document.getElementById('app-screen').classList.remove('hidden');
     switchTab('files');
     await loadPin();
-    await Promise.all([loadFiles(), loadNotes()]);
+    await Promise.all([loadFiles(), loadNotes(), loadEvents()]);
     subscribeRealtime();
+    updateNotifBanner();
+    checkReminders();
+    if (reminderInterval) clearInterval(reminderInterval);
+    reminderInterval = setInterval(checkReminders, 30000);
   }
 
   async function logout() {
     await sb.auth.signOut();
     if (realtimeChannel) sb.removeChannel(realtimeChannel);
-    currentUser = null; files = []; notes = []; pinHash = null;
+    if (reminderInterval) clearInterval(reminderInterval);
+    currentUser = null; files = []; notes = []; events = []; pinHash = null; notifiedThisSession = new Set();
     document.getElementById('app-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.remove('hidden');
     showPasswordStep();
@@ -718,6 +866,150 @@
     await loadNotes();
   }
 
+  // ================= Events / Tasks / Reminders =================
+  async function loadEvents() {
+    try {
+      const { data, error } = await sb.from('events').select('*').order('event_time', { ascending: true });
+      if (error) throw error;
+      events = data || [];
+    } catch (err) { console.error(err); }
+    await renderEvents();
+  }
+
+  function formatEventTime(iso) {
+    return new Date(iso).toLocaleString('bn-BD', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function timeUntilLabel(iso) {
+    const diffMs = new Date(iso).getTime() - Date.now();
+    if (diffMs <= 0) return 'সময় পার হয়ে গেছে';
+    const mins = Math.round(diffMs / 60000);
+    if (mins < 60) return `${mins} মিনিট বাকি`;
+    const hrs = Math.round(mins / 60);
+    if (hrs < 24) return `${hrs} ঘণ্টা বাকি`;
+    return `${Math.round(hrs / 24)} দিন বাকি`;
+  }
+
+  async function renderEvents() {
+    const list = document.getElementById('events-list');
+    if (!events.length) {
+      list.innerHTML = '<p class="text-muted text-sm text-center py-6">কোনো ইভেন্ট/টাস্ক নেই</p>';
+      document.getElementById('events-count').textContent = '';
+      return;
+    }
+    const cards = await Promise.all(events.map(async (e) => {
+      let thumb = '';
+      if (e.image_path) {
+        try {
+          const { data } = await sb.storage.from(BUCKET).createSignedUrl(e.image_path, 3600);
+          if (data?.signedUrl) thumb = `<img src="${data.signedUrl}" class="w-full h-32 object-cover rounded-lg mb-2">`;
+        } catch {}
+      }
+      const overdue = new Date(e.event_time).getTime() <= Date.now();
+      const badgeColor = e.is_done ? '#2DA44E' : (overdue ? '#8B949E' : '#D29922');
+      return `
+        <div class="bg-surface border border-edge rounded-xl p-4 ${e.is_done ? 'opacity-50' : ''}">
+          ${thumb}
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h3 class="font-display font-semibold text-lg text-ink ${e.is_done ? 'line-through' : ''}">${escapeHtml(e.title)}</h3>
+              ${e.description ? `<p class="text-sm text-muted mt-1">${escapeHtml(e.description)}</p>` : ''}
+            </div>
+            <button onclick="askDelete('event', '${e.id}', '${escapeHtml(e.title).replace(/'/g, "\\'")}')" class="text-muted hover:text-rust p-1 shrink-0">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            </button>
+          </div>
+          <div class="flex items-center justify-between mt-3 flex-wrap gap-2">
+            <span class="font-mono text-xs px-2 py-1 rounded-full" style="background:${badgeColor}22; color:${badgeColor};">
+              ${formatEventTime(e.event_time)} · ${e.is_done ? 'সম্পন্ন' : timeUntilLabel(e.event_time)}
+            </span>
+            <label class="flex items-center gap-1.5 text-xs text-muted">
+              <input type="checkbox" ${e.is_done ? 'checked' : ''} onchange="toggleEventDone('${e.id}', ${e.is_done})">
+              সম্পন্ন
+            </label>
+          </div>
+          <p class="font-mono text-[10px] text-muted/60 mt-1">🔔 ${e.remind_minutes_before} মিনিট আগে রিমাইন্ডার</p>
+        </div>`;
+    }));
+    list.innerHTML = cards.join('');
+    document.getElementById('events-count').textContent = events.length + ' টি';
+  }
+
+  async function addEvent(btn) {
+    const title = document.getElementById('new-event-title').value.trim();
+    const dt = document.getElementById('new-event-datetime').value;
+    const desc = document.getElementById('new-event-desc').value.trim();
+    const remind = parseInt(document.getElementById('new-event-remind').value, 10) || 30;
+    const fileInput = document.getElementById('new-event-image');
+    const file = fileInput.files[0];
+    if (!title || !dt) { alert('বিষয় ও তারিখ-সময় দাও'); return; }
+
+    btn.disabled = true; btn.textContent = 'সেভ হচ্ছে...';
+    let imagePath = null;
+    if (file) {
+      imagePath = `${currentUser.id}/events/${Date.now()}_${file.name}`;
+      const { error: upErr } = await sb.storage.from(BUCKET).upload(imagePath, file);
+      if (upErr) { alert('ছবি আপলোড ব্যর্থ: ' + upErr.message); imagePath = null; }
+    }
+    const { error } = await sb.from('events').insert({
+      user_id: currentUser.id,
+      title, description: desc || null,
+      image_path: imagePath,
+      event_time: new Date(dt).toISOString(),
+      remind_minutes_before: remind,
+    });
+    btn.disabled = false; btn.textContent = 'সেভ করো';
+    if (error) { alert('ইভেন্ট সেভ করতে সমস্যা: ' + error.message); return; }
+
+    document.getElementById('new-event-title').value = '';
+    document.getElementById('new-event-datetime').value = '';
+    document.getElementById('new-event-desc').value = '';
+    document.getElementById('new-event-remind').value = 30;
+    fileInput.value = '';
+    closeModal('event-modal');
+    await loadEvents();
+  }
+
+  async function toggleEventDone(id, current) {
+    await sb.from('events').update({ is_done: !current }).eq('id', id);
+    await loadEvents();
+  }
+
+  // ---- Notifications / Reminders ----
+  function updateNotifBanner() {
+    const banner = document.getElementById('notif-permission-banner');
+    if (!banner) return;
+    if ('Notification' in window && Notification.permission === 'default') banner.classList.remove('hidden');
+    else banner.classList.add('hidden');
+  }
+
+  async function requestNotifPermission() {
+    if (!('Notification' in window)) { alert('এই ব্রাউজার নোটিফিকেশন সাপোর্ট করে না।'); return; }
+    await Notification.requestPermission();
+    updateNotifBanner();
+  }
+
+  async function checkReminders() {
+    if (!events.length) return;
+    const now = Date.now();
+    for (const e of events) {
+      if (e.is_done || e.reminder_fired || notifiedThisSession.has(e.id)) continue;
+      const eventMs = new Date(e.event_time).getTime();
+      const remindMs = eventMs - e.remind_minutes_before * 60000;
+      if (now >= remindMs && now < eventMs) {
+        notifiedThisSession.add(e.id);
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('🔔 ' + e.title, {
+            body: `${e.remind_minutes_before} মিনিটের মধ্যে শুরু — ${formatEventTime(e.event_time)}`,
+            icon: 'icon-192.png',
+          });
+        }
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        await sb.from('events').update({ reminder_fired: true }).eq('id', e.id);
+      }
+    }
+  }
+
   // ================= Delete protection (PIN) =================
   async function sha256Hex(text) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -750,7 +1042,8 @@
       return;
     }
     pendingDelete = { kind, id };
-    document.getElementById('delete-target-name').textContent = `"${name}" — এই ${kind === 'file' ? 'ফাইলটি' : 'নোটটি'} স্থায়ীভাবে মুছে যাবে।`;
+    const labelMap = { file: 'ফাইলটি', note: 'নোটটি', event: 'ইভেন্ট/টাস্কটি' };
+    document.getElementById('delete-target-name').textContent = `"${name}" — এই ${labelMap[kind] || 'আইটেমটি'} স্থায়ীভাবে মুছে যাবে।`;
     document.getElementById('delete-pin-input').value = '';
     openModal('delete-modal');
   }
@@ -764,6 +1057,11 @@
       if (f) await sb.storage.from(BUCKET).remove([f.storage_path]);
       await sb.from('files').delete().eq('id', pendingDelete.id);
       await loadFiles();
+    } else if (pendingDelete.kind === 'event') {
+      const ev = events.find(x => x.id === pendingDelete.id);
+      if (ev?.image_path) await sb.storage.from(BUCKET).remove([ev.image_path]);
+      await sb.from('events').delete().eq('id', pendingDelete.id);
+      await loadEvents();
     } else {
       await sb.from('notes').delete().eq('id', pendingDelete.id);
       await loadNotes();
@@ -777,6 +1075,7 @@
       exported_at: new Date().toISOString(),
       notes: notes.map(n => ({ title: n.title, body: n.body, color_tag: n.color_tag, created_at: n.created_at })),
       files_metadata: files.map(f => ({ file_name: f.file_name, file_type: f.file_type, file_size: f.file_size, uploaded_at: f.uploaded_at })),
+      events: events.map(e => ({ title: e.title, description: e.description, event_time: e.event_time, remind_minutes_before: e.remind_minutes_before, is_done: e.is_done })),
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
@@ -819,6 +1118,7 @@
 
   function handleFab() {
     if (window.currentTab === 'notes') openModal('note-modal');
+    else if (window.currentTab === 'events') openModal('event-modal');
     else openModal('upload-modal');
   }
 
@@ -837,6 +1137,7 @@
     realtimeChannel = sb.channel('vault-sync-' + currentUser.id)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'files', filter: `user_id=eq.${currentUser.id}` }, loadFiles)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'notes', filter: `user_id=eq.${currentUser.id}` }, loadNotes)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'events', filter: `user_id=eq.${currentUser.id}` }, loadEvents)
       .subscribe();
   }
 
@@ -874,6 +1175,15 @@
           </div>`).join('')
       : '<p style="font-size:12px;color:#777;">কোনো ফাইল নেই</p>';
 
+    const eventsHtml = events.length
+      ? events.map(e => `
+          <div class="pr-item">
+            <div class="pr-title">${e.is_done ? '✅ ' : ''}${escapeHtml(e.title)}</div>
+            ${e.description ? `<div class="pr-body">${escapeHtml(e.description)}</div>` : ''}
+            <div class="pr-date">${formatEventTime(e.event_time)}</div>
+          </div>`).join('')
+      : '<p style="font-size:12px;color:#777;">কোনো ইভেন্ট/টাস্ক নেই</p>';
+
     document.getElementById('print-report').innerHTML = `
       <h1>ভল্ট — সারসংক্ষেপ রিপোর্ট</h1>
       <p class="pr-meta">তৈরি হয়েছে: ${generatedAt} · ${currentUser?.email || ''}</p>
@@ -881,6 +1191,8 @@
       ${notesHtml}
       <h2>📁 ফাইল তালিকা (${files.length})</h2>
       ${filesHtml}
+      <h2>📅 ইভেন্ট/টাস্ক (${events.length})</h2>
+      ${eventsHtml}
       <p style="font-size:10px;color:#999;margin-top:20px;">এই রিপোর্ট শুধু পড়ার/প্রিন্টের জন্য — ব্যাকআপ/রিস্টোরের জন্য Export (JSON) ব্যবহার করো।</p>
     `;
     window.print();
