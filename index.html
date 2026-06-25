@@ -327,9 +327,9 @@
   <div class="bg-surface border border-edge rounded-2xl p-6 w-full max-w-sm">
     <h3 class="font-display text-lg mb-4">নতুন নোট</h3>
     <input id="new-note-title" type="text" placeholder="শিরোনাম"
-      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-3">
     <textarea id="new-note-body" placeholder="তোমার নোট লিখো..." rows="5"
-      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-4 resize-none"></textarea>
+      class="w-full bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-4 resize-none"></textarea>
     <div class="flex gap-2 mb-4" id="color-picker">
       <button data-color="brass" class="color-dot w-6 h-6 rounded-full bg-brass ring-2 ring-offset-2 ring-offset-surface ring-brass"></button>
       <button data-color="sage" class="color-dot w-6 h-6 rounded-full bg-sage"></button>
@@ -350,15 +350,15 @@
 
     <label class="text-sm uppercase tracking-wider text-muted font-mono">বিষয়</label>
     <input id="new-event-title" type="text" placeholder="যেমন: ব্যাংকে যাওয়া, মিটিং"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-3">
 
     <label class="text-sm uppercase tracking-wider text-muted font-mono">তারিখ ও সময়</label>
     <input id="new-event-datetime" type="datetime-local"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-3">
 
     <label class="text-sm uppercase tracking-wider text-muted font-mono">বিস্তারিত (ঐচ্ছিক)</label>
     <textarea id="new-event-desc" placeholder="বিস্তারিত লিখো..." rows="3"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3 resize-none"></textarea>
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-3 resize-none"></textarea>
 
     <label class="text-sm uppercase tracking-wider text-muted font-mono">ছবি (ঐচ্ছিক)</label>
     <input id="new-event-image" type="file" accept="image/*"
@@ -366,7 +366,7 @@
 
     <label class="text-sm uppercase tracking-wider text-muted font-mono">কত মিনিট আগে রিমাইন্ড করবে?</label>
     <input id="new-event-remind" type="number" min="1" value="30"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-2">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-2">
     <div class="flex gap-2 mb-4 flex-wrap">
       <button onclick="document.getElementById('new-event-remind').value=15" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">১৫ মিনিট</button>
       <button onclick="document.getElementById('new-event-remind').value=30" class="px-3 py-1 rounded-full text-xs border border-edge text-muted">৩০ মিনিট</button>
@@ -404,10 +404,10 @@
     <p class="text-sm text-muted mb-4">একবার সেট করলে পরের বার থেকে ইমেইল + এই পাসওয়ার্ড দিয়েই সরাসরি লগইন করতে পারবে — ইমেইল কোডের জন্য আর অপেক্ষা করতে হবে না।</p>
     <label class="text-sm uppercase tracking-wider text-muted font-mono">নতুন পাসওয়ার্ড</label>
     <input id="new-password-input" type="password" placeholder="কমপক্ষে ৬ ক্যারেক্টার"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-3">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-3">
     <label class="text-sm uppercase tracking-wider text-muted font-mono">আবার লিখো</label>
     <input id="confirm-password-input" type="password" placeholder="পাসওয়ার্ড আবার লিখো"
-      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-base mb-4">
+      class="w-full mt-2 bg-surface2 border border-edge rounded-lg px-5 py-4 text-ink text-base mb-4">
     <div class="flex gap-2">
       <button onclick="closeModal('password-modal')" class="flex-1 border border-edge rounded-lg py-3 text-sm text-muted">বাতিল</button>
       <button onclick="setPassword()" class="flex-1 bg-brass text-base rounded-lg py-3 text-sm font-semibold">সেভ করো</button>
@@ -582,6 +582,8 @@
     document.querySelector('.quote-chip[data-cat="সব"]').style.setProperty('--chip-color', '#E9EDF1');
   }
 
+  let currentRenderedQuotes = [];
+
   function renderQuotesList() {
     let items = (activeQuoteCategory === 'সব') ? quoteLibrary : quoteLibrary.filter(q => q.category === activeQuoteCategory);
     const term = activeQuoteSearch.trim().toLowerCase();
@@ -592,16 +594,33 @@
         q.category.toLowerCase().includes(term)
       );
     }
-    document.getElementById('quotes-list').innerHTML = items.length ? items.map(q => `
+    currentRenderedQuotes = items;
+    document.getElementById('quotes-list').innerHTML = items.length ? items.map((q, i) => `
       <div class="bg-surface border-y border-r rounded-r-xl p-4" style="border-color:${q.color}33; border-left:4px solid ${q.color};">
         <p class="text-base leading-relaxed text-ink">“${q.text}”</p>
-        <div class="flex items-center justify-between mt-3">
+        <div class="flex items-center justify-between mt-3 gap-2">
           <span class="font-mono text-xs text-muted">— ${q.source}</span>
-          <span class="text-xs font-mono px-2 py-0.5 rounded-full" style="background:${q.color}22; color:${q.color};">${q.category}</span>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="shareQuote(${i})" title="শেয়ার করো" class="text-muted hover:text-brass p-1">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg>
+            </button>
+            <span class="text-xs font-mono px-2 py-0.5 rounded-full" style="background:${q.color}22; color:${q.color};">${q.category}</span>
+          </div>
         </div>
       </div>
     `).join('') : '<p class="text-muted text-sm text-center py-6">কোনো উক্তি পাওয়া যায়নি</p>';
     document.getElementById('quotes-count').textContent = items.length + ' টি উক্তি';
+  }
+
+  async function shareQuote(idx) {
+    const q = currentRenderedQuotes[idx];
+    if (!q) return;
+    const shareText = `“${q.text}”\n— ${q.source}\n\n📖 ভল্ট অ্যাপের উক্তি ভাণ্ডার থেকে`;
+    if (navigator.share) {
+      try { await navigator.share({ text: shareText }); } catch (e) {}
+    } else {
+      window.open('https://wa.me/?text=' + encodeURIComponent(shareText), '_blank');
+    }
   }
 
   function filterQuotes(cat) {
